@@ -1,13 +1,7 @@
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
-
-"""Dữ liệu có 21 cột, trong đó các cột số phù hợp để chuẩn hóa là:
-
-Age (Tuổi)
-Qty (Số lượng)
-Amount (Số tiền)
-ship-postal-code (Mã bưu chính)"""
-
 
 # Đọc dữ liệu từ file Excel
 file_path = "Fashion Store Data Analysis.xlsx"  # Đổi tên file nếu cần
@@ -33,6 +27,19 @@ def normalize_data(df, columns):
 
 # Áp dụng chuẩn hóa
 df_scaled = normalize_data(df, columns_to_scale)
+
+# Vẽ biểu đồ phân bố cho các phương pháp chuẩn hóa
+fig, axes = plt.subplots(2, 3, figsize=(18, 10))
+
+for i, col in enumerate(columns_to_scale):
+    sns.histplot(df_scaled[col + "_minmax"], bins=30, kde=True, ax=axes[0, i], color="blue")
+    axes[0, i].set_title(f"Min-Max Scaling: {col}")
+
+    sns.histplot(df_scaled[col + "_zscore"], bins=30, kde=True, ax=axes[1, i], color="red")
+    axes[1, i].set_title(f"StandardScaler: {col}")
+
+plt.tight_layout()
+plt.show()
 
 # Lưu kết quả vào file Excel mới
 output_file = "Fashion_Store_Data_Normalized.xlsx"
